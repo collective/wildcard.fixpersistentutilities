@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.1'
+version = '1.0a1'
 
 setup(name='wildcard.fixpersistentutilities',
       version=version,
       description="a package that can help you remove local persistent utilies",
       long_description=open("README.txt").read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
+                       open("CHANGES.txt")).read(),
       # Get more strings from
       # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
