@@ -1,0 +1,90 @@
+<html>
+<head>
+	<title>Fix Persistent Utilities</title>
+</head>
+<body>
+	<div id="wrapper">
+
+	<h1>Fix Persistent Utilities</h1>
+	<h3>WARNING!!! Use this with extreme care! You can really screw up your
+		site by doing something wrong here. Back up first!
+	</h3>
+	
+	<p tal:condition="view/expert">
+		You are in expert mode which allows you to remove even plone registered utilities.
+		You can 
+		<a tal:attributes="href string:${context/absolute_url}/@@deactivate-expert-mode-for-fixing-persistent-utilities">
+			deactivate expert mode
+		</a>
+		if you're afraid you may mess something up :)
+	</p>
+	
+	<p tal:condition="not: view/expert">
+		You are not in expert mode. This means that deleting some of the registration is prohibited.
+		You can 
+		<a tal:attributes="href string:${context/absolute_url}/@@activate-expert-mode-for-fixing-persistent-utilities">
+			activate expert mode
+		</a>
+		if you really think you know what you're doing.
+	</p>
+	
+	<div id="utilities" tal:define="utilities options/utilities">
+		<h2>Adapters</h2>
+		<ul id="adapters">
+			<tal:adapters tal:repeat="adapter python: utilities['adapters'].items()">
+				<li>
+					<b tal:content="python: view.name(adapter[0])" />
+					<tal:delete tal:condition="python: view.deletable(adapter[0])">
+					[ <a tal:attributes="href python: view.remove_utility_url(adapter[0], 'adapters')">-</a> ]
+					</tal:delete>
+					<ul>
+						<tal:values tal:repeat="item python: adapter[1].items()">
+							<li>
+								<b tal:content="python: item[0]" /> - <span tal:content="python: item[1]" />
+								<tal:delete tal:condition="python: view.deletable(item[1])">
+								[ <a tal:attributes="href python: view.remove_utility_reg_url(adapter[0], 'adapters', item[0], item[1])">-</a> ]
+								</tal:delete>
+							</li>
+						</tal:values>
+					</ul>
+				</li>
+			</tal:adapters>
+		</ul>
+		<h2>Subscribers</h2>
+		<ul id="subscribers">
+			<tal:adapters tal:repeat="subscriber python: utilities['subscribers'].items()">
+				<li>
+					<b tal:content="python: view.name(subscriber[0])" />
+					<tal:delete tal:condition="python: view.deletable(subscriber[0])">
+					[ <a tal:attributes="href python: view.remove_utility_url(subscriber[0], 'subscribers')">-</a> ]
+					</tal:delete>
+					<ul>
+						<tal:values tal:repeat="item python: subscriber[1].items()">
+							<tal:regs tal:repeat="sub python: item[1]">
+								<li>
+									<span tal:content="python: view.name(sub)" />
+									<tal:delete tal:condition="python: view.deletable(sub)">
+									[ <a tal:attributes="href python: view.remove_utility_reg_url(subscriber[0], 'subscribers', item[0], sub)">-</a> ]
+									</tal:delete>
+								</li>
+							</tal:regs>
+						</tal:values>
+					</ul>
+				</li>
+			</tal:adapters>
+		</ul>
+		<h2>Provided</h2>
+		<ul id="provided">
+			<tal:adapters tal:repeat="provide python: utilities['provided'].items()">
+				<li>
+					<b tal:content="python: view.name(provide[0])" />
+					<tal:delete tal:condition="python: view.deletable(provide[0])">
+					[ <a tal:attributes="href python: view.remove_utility_url(provide[0], 'provided')">-</a> ]
+					</tal:delete>
+				</li>
+			</tal:adapters>
+		</ul>
+	</div>
+	</div>
+</body>
+</html>

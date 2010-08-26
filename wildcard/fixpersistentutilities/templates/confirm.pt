@@ -1,0 +1,23 @@
+<html>
+<head>
+	<title>Fix Persistent Utilities</title>
+</head>
+<body>
+	<div id="wrapper">
+
+		<h1>Are you sure?</h1>
+		<h3 tal:content="options/msg"></h3>
+
+
+		<form tal:attributes="action python: context.absolute_url() + options['action']" method="post">
+			<tal:params tal:repeat="param python: options['params']">
+				<input type="hidden" tal:attributes="name python: param[0]; value python: param[1]" />
+			</tal:params>
+			
+			<input type="submit" name="submit" value="Yes" />
+			<input type="submit" name="cancel" value="No" />
+		</form>
+
+	</div>
+</body>
+</html>

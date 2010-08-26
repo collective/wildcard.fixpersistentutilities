@@ -1,0 +1,50 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+	xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="wildcard.fixpersistentutilities">
+
+  <five:registerPackage package="." initialize=".initialize" />
+
+	<browser:page
+        name="fix-persistent-utilities"
+        for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+        class=".views.FixPersistentUtilities"
+        permission="cmf.ManagePortal"
+    />
+
+	<browser:page
+        name="delete-persistent-utility"
+        for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+        class=".views.FixPersistentUtilities"
+		attribute="delete_utility"
+        permission="cmf.ManagePortal"
+    />
+
+	<browser:page
+        name="delete-persistent-utility-reg"
+        for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+        class=".views.FixPersistentUtilities"
+		attribute="delete_utility_reg"
+        permission="cmf.ManagePortal"
+    />
+
+	<browser:page
+        name="activate-expert-mode-for-fixing-persistent-utilities"
+        for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+        class=".views.FixPersistentUtilities"
+		attribute="activate_expert_mode"
+        permission="cmf.ManagePortal"
+    />
+
+	<browser:page
+        name="deactivate-expert-mode-for-fixing-persistent-utilities"
+        for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+        class=".views.FixPersistentUtilities"
+		attribute="deactivate_expert_mode"
+        permission="cmf.ManagePortal"
+    />
+
+  
+</configure>
