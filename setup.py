@@ -7,7 +7,7 @@ setup(name='wildcard.fixpersistentutilities',
       version=version,
       description="a package that can help you remove local persistent utilies",
       long_description=open("README.txt").read() + "\n" +
-                       open("CHANGES.txt")).read(),
+                       open("CHANGES.txt").read(),
       # Get more strings from
       # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
