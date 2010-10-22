@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.0a2 2010-10-22
+----------------
+
+ - fix case where object may not have a _p_oid
+
 1.0a1 2010-08-25
 ----------------
 

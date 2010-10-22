@@ -32,7 +32,7 @@ def find_object_or_class(objs, klass, oid):
     if type(objs) not in [list, tuple, set]:
         objs = [objs]
     for obj in objs:
-        if (klass == obj or (obj.__class__.__name__ == klass.__name__ and oid == obj._p_oid)) and\
+        if (klass == obj or (obj.__class__.__name__ == klass.__name__ and oid == getattr(obj, '_p_oid', ''))) and\
                 obj.__module__ == klass.__module__:
             return obj
             
