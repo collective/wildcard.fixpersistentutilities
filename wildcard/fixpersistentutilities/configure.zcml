@@ -9,6 +9,45 @@
 
 	<browser:page
         name="fix-persistent-utilities"
+        for="OFS.interfaces.IApplication"
+        class=".views.FixPersistentUtilities"
+        permission="cmf.ManagePortal"
+    />
+
+	<browser:page
+        name="delete-persistent-utility"
+        for="OFS.interfaces.IApplication"
+        class=".views.FixPersistentUtilities"
+		    attribute="delete_utility"
+        permission="cmf.ManagePortal"
+    />
+
+	<browser:page
+        name="delete-persistent-utility-reg"
+        for="OFS.interfaces.IApplication"
+        class=".views.FixPersistentUtilities"
+		    attribute="delete_utility_reg"
+        permission="cmf.ManagePortal"
+    />
+
+	<browser:page
+        name="activate-expert-mode-for-fixing-persistent-utilities"
+        for="OFS.interfaces.IApplication"
+        class=".views.FixPersistentUtilities"
+		    attribute="activate_expert_mode"
+        permission="cmf.ManagePortal"
+    />
+
+	<browser:page
+        name="deactivate-expert-mode-for-fixing-persistent-utilities"
+        for="OFS.interfaces.IApplication"
+        class=".views.FixPersistentUtilities"
+		    attribute="deactivate_expert_mode"
+        permission="cmf.ManagePortal"
+    />
+
+	<browser:page
+        name="fix-persistent-utilities"
         for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
         class=".views.FixPersistentUtilities"
         permission="cmf.ManagePortal"
@@ -26,7 +65,7 @@
         name="delete-persistent-utility-reg"
         for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
         class=".views.FixPersistentUtilities"
-		attribute="delete_utility_reg"
+		    attribute="delete_utility_reg"
         permission="cmf.ManagePortal"
     />
 
@@ -34,7 +73,7 @@
         name="activate-expert-mode-for-fixing-persistent-utilities"
         for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
         class=".views.FixPersistentUtilities"
-		attribute="activate_expert_mode"
+		    attribute="activate_expert_mode"
         permission="cmf.ManagePortal"
     />
 
@@ -42,7 +81,7 @@
         name="deactivate-expert-mode-for-fixing-persistent-utilities"
         for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
         class=".views.FixPersistentUtilities"
-		attribute="deactivate_expert_mode"
+		    attribute="deactivate_expert_mode"
         permission="cmf.ManagePortal"
     />
 
