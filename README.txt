@@ -11,7 +11,6 @@ Features
  - remove adapters
  - remove subscribers
  - remove provided interfaces
- - remove LinguaPlone left-over ugliness
  - remove provided interfaces across the entire site
    - useful for removing collective.flowplayer
 
