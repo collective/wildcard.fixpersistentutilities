@@ -1,0 +1,39 @@
+<html>
+<head>
+  <title>Fix Interfaces</title>
+    <style>
+    #wrapper{ max-width: 900px; margin: 10px auto; border: 1px dashed #DD8663; padding: 10px;}
+    h1{ margin: 10px 5px; padding:0; border-bottom: 1px solid #DD8663;}
+    h3{ padding: 0 15px; font-size: 16px; color: red;}
+    p{ background-color: #dddddd; border: 1px solid #C2C2C2; padding: 10px;} 
+    form{ padding: 10px; border: 1px dashed #DD8663;}
+    legend{ font-weight: bold; color: #DD8663;}
+  </style>
+
+</head>
+<body>
+  <div id="wrapper">
+
+    <h1>Fix Interfaces</h1>
+    <h3>WARNING!!! Use this with extreme care! You can really screw up your
+      site by doing something wrong here. Back up first!
+    </h3>
+
+    <p><a tal:attributes="href string:${context/absolute_url}/@@fix-persistent-utilities">Back to fixing persistent utilities</a></p>
+    
+    <form method="post">
+      <legend>Remove Interface</legend>
+      <p>This will traverse your site and make any objects that provide
+	the interface your specify no longer provide them. This helps assist
+	in the removal of certain add-on products that leave provided interfaces
+	around after uninstall.
+      </p>
+      <input type="hidden" name="submitted" value="true" />
+      Dry Run: <input type="checkbox" name="dryrun" value="true" /><br />
+      Dotted Interface Name: <input type="text" name="dottedname" value="" /> <br />
+      <input type="submit" name="submit" value="Remove Provided Interface" />
+    </form>
+
+  </div>
+</body>
+</html>

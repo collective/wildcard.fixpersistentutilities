@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.1b1 2011-06-02
+----------------
+
+ - provide ability to remove provided interfaces now also.
+
+ - clean up
+
+
 1.0a3 2010-10-22
 ----------------
 

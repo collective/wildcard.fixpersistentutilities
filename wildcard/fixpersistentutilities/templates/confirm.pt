@@ -1,23 +1,31 @@
 <html>
 <head>
-	<title>Fix Persistent Utilities</title>
+  <title>Fix Persistent Utilities</title>
+    <style>
+    #wrapper{ max-width: 900px; margin: 10px auto; border: 1px dashed #DD8663; padding: 10px;}
+    h1{ margin: 10px 5px; padding:0; border-bottom: 1px solid #DD8663;}
+    h3{ padding: 0 15px; font-size: 16px; color: red;}
+    p{ background-color: #dddddd; border: 1px solid #C2C2C2; padding: 10px;} 
+    form{ padding: 10px; border: 1px dashed #DD8663;}
+    legend{ font-weight: bold; color: #DD8663;}
+  </style>
 </head>
 <body>
-	<div id="wrapper">
-
-		<h1>Are you sure?</h1>
-		<h3 tal:content="options/msg"></h3>
-
-
-		<form tal:attributes="action python: context.absolute_url() + options['action']" method="post">
-			<tal:params tal:repeat="param python: options['params']">
-				<input type="hidden" tal:attributes="name python: param[0]; value python: param[1]" />
-			</tal:params>
-			
-			<input type="submit" name="submit" value="Yes" />
-			<input type="submit" name="cancel" value="No" />
-		</form>
-
-	</div>
+  <div id="wrapper">
+    
+    <h1>Are you sure?</h1>
+    <h3 tal:content="options/msg"></h3>
+    
+    
+    <form tal:attributes="action python: context.absolute_url() + options['action']" method="post">
+      <tal:params tal:repeat="param python: options['params']">
+	<input type="hidden" tal:attributes="name python: param[0]; value python: param[1]" />
+      </tal:params>
+      
+      <input type="submit" name="submit" value="Yes" />
+      <input type="submit" name="cancel" value="No" />
+    </form>
+    
+  </div>
 </body>
 </html>

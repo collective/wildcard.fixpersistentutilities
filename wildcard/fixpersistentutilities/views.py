@@ -75,7 +75,7 @@ class FixPersistentUtilities(BrowserView):
             return True
 
     def delete_utility_reg(self):
-        if self.request.get('submit') != 'Yes':
+        if not self.request.get('submit', self.request.get('cancel')):
             return self.confirm_template(
                 msg="Are you sure you want to delete %s -- %s : %s" % (
                     self.request.get('util_dottedname'), 
@@ -85,6 +85,8 @@ class FixPersistentUtilities(BrowserView):
                 action='/delete-persistent-utility-reg',
                 params=self.request.form.items()
             )
+        elif self.request.get('cancel') == 'No':
+            return self.request.response.redirect(self.context.absolute_url() + '/@@fix-persistent-utilities')
         
         utilities = self.utilities()
         _type = self.request.get('type')
@@ -111,12 +113,14 @@ class FixPersistentUtilities(BrowserView):
         self.request.response.redirect(self.context.absolute_url() + '/@@fix-persistent-utilities')
 
     def delete_utility(self):
-        if self.request.get('submit') != 'Yes':
+        if not self.request.get('submit', self.request.get('cancel')):
             return self.confirm_template(
                 msg="Are you sure you want to delete %s" % self.request.get('util_dottedname'),
                 action='/delete-persistent-utility',
                 params=self.request.form.items()
             )
+        elif self.request.get('cancel') == 'No':
+            return self.request.response.redirect(self.context.absolute_url() + '/@@fix-persistent-utilities')
         
         utilities = self.utilities()
         _type = self.request.get('type')
@@ -144,10 +148,12 @@ class FixPersistentUtilities(BrowserView):
         
     def utility_reg_data(self, util_klass, _type, reg_name, reg_klass):
         data = self.utility_data(util_klass, _type)
+        dottedname = reg_klass.__module__ + '.' + (inspect.isclass(reg_klass) and reg_klass.__name__ or reg_klass.__class__.__name__)
+        oid = b64encode(hasattr(reg_klass, '_p_oid') and reg_klass._p_oid or '')
         data.update({
             'reg_name' : reg_name,
-            'reg_dottedname' : reg_klass.__module__ + '.' + (inspect.isclass(reg_klass) and reg_klass.__name__ or reg_klass.__class__.__name__),
-            'reg_obj_oid' : b64encode(hasattr(reg_klass, '_p_oid') and reg_klass._p_oid or '')
+            'reg_dottedname' : dottedname,
+            'reg_obj_oid' : oid
         })
         return data
 
@@ -175,4 +181,41 @@ class FixPersistentUtilities(BrowserView):
     @property
     def expert(self):
         return not self.cookie_expired and self.request.cookies.get('expert-mode', 'no') == 'yes' or self.expert_activated
+
+from zope.interface import noLongerProvides
+
+class RemoveInterfaces(BrowserView):
+
+    def obj_path(self, obj):
+        if hasattr(obj, 'getPhysicalPath'):
+            return '/'.join(obj.getPhysicalPath())
+        else:
+            return getattr(obj, 'id')
+
+    def check_folder(self, context, iface, dryrun):
+        for id in context.objectIds():
+            obj = context[id]
+            if iface.providedBy(obj):
+                if not dryrun:
+                    noLongerProvides(obj, iface)
+                self.request.response.write('Removed from ' + self.obj_path(obj) + '\n')
+                
+            if hasattr(obj, 'objectIds'):
+                self.check_folder(obj, iface, dryrun)
+
+    def __call__(self):
+        if self.request.get('submitted'):
+            dryrun = self.request.get('dryrun', False) == 'true' or False
+            iface = resolve(self.request.get('dottedname'))
             
+            self.request.response.write('Removing ' + self.request.get('dottedname') + '\n')
+
+            obj = self.context
+            if iface.providedBy(obj):
+                if not dryrun:
+                    noLongerProvides(obj, iface)
+                self.request.response.write('Removed from ' + self.obj_path(obj) + '\n')
+            self.check_folder(obj, iface, dryrun)
+            self.request.response.write('done.')
+        else:
+            return super(RemoveInterfaces, self).__call__()
