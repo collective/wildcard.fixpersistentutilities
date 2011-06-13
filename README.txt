@@ -2,7 +2,7 @@ Introduction
 ============
 
 This product was created to help you remove nasty local persistent
-utilities  that won't go away and cab destroy your instance when
+utilities that won't go away and can destroy your instance when
 you try to remove a product that registered one.
 
 Features
