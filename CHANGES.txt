@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1b2 ~ unreleased
+1.1b2 ~ 2011-07-11
 ------------------
 
 - dynamically create missing classes so you can potentially
