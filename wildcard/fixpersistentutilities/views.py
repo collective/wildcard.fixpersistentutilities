@@ -1,6 +1,5 @@
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from Products.CMFCore.utils import getToolByName
 from OFS.interfaces import IApplication
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.component import getGlobalSiteManager
@@ -66,12 +65,14 @@ class FixPersistentUtilities(BrowserView):
         setattr(self.sitemanager().utilities, '_' + _type, utilities)
 
     def deletable(self, klass):
-        if self.expert:
+        if not hasattr(klass, '__module__'):
+            return False
+        elif self.expert:
             return True
         else:
             for namespace in EXPERT_ONLY_NAMESPACES:
                 if klass.__module__.startswith(namespace):
-                    return False
+                    return False                    
             return True
 
     def delete_utility_reg(self):
@@ -183,6 +184,7 @@ class FixPersistentUtilities(BrowserView):
         return not self.cookie_expired and self.request.cookies.get('expert-mode', 'no') == 'yes' or self.expert_activated
 
 from zope.interface import noLongerProvides
+from classfactory import create_module
 
 class RemoveInterfaces(BrowserView):
 
@@ -206,7 +208,12 @@ class RemoveInterfaces(BrowserView):
     def __call__(self):
         if self.request.get('submitted'):
             dryrun = self.request.get('dryrun', False) == 'true' or False
-            iface = resolve(self.request.get('dottedname'))
+            try:
+                iface = resolve(self.request.get('dottedname'))
+            except ImportError:
+                # can't find, let's create it and maybe we can still fix it..
+                module, name = self.request.get('dottedname').rsplit('.', 1)
+                _, iface = create_module(module, name)
             
             self.request.response.write('Removing ' + self.request.get('dottedname') + '\n')
 

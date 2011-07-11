@@ -40,8 +40,7 @@ Advice
 Do not include this product as part of your normal set of
 products. Only install this product on debug zope clients.
 
-Also, to actually fix a product, you need to actually have the product
-installed while removing it.
-
-
+This product should allow you to remove things from products that are
+no longer installed on the system; although, if you experience problems
+removing things, make sure to add those eggs to the system again.
 

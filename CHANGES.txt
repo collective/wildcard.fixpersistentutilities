@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.1b2 ~ unreleased
+------------------
+
+- dynamically create missing classes so you can potentially
+  remove classes from products that are no longer installed
+  on the instance.
+  
+
 1.1b1 2011-06-02
 ----------------
 
