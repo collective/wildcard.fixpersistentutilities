@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.1b3 ~ 2011-11-06
+------------------
+
+- attempt to prevent saving generated objects to database
+  unless you're actually removing it.
+
+
 1.1b2 ~ 2011-07-11
 ------------------
 

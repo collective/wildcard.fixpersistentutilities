@@ -1,5 +1,5 @@
-  # -*- extra stuff goes here -*- 
-import classfactory
+# -*- extra stuff goes here -*-
+from wildcard.fixpersistentutilities import classfactory
 import cPickle
 import cStringIO
 
@@ -7,8 +7,10 @@ import cStringIO
 
 from ZODB.serialize import ObjectReader
 
+
 def NewObjectReader_get_class(self, module, name):
     return classfactory.ClassFactory(self._conn, module, name)
+
 
 def NewObjectReader_get_unpickler(self, pickle):
     file = cStringIO.StringIO(pickle)
@@ -23,6 +25,7 @@ def NewObjectReader_get_unpickler(self, pickle):
     unpickler.find_global = find_global
 
     return unpickler
+
 
 def NewObjectReader_load_multi_persistent(self, database_name, oid, klass):
     conn = self._conn.get_connection(database_name)
@@ -41,6 +44,7 @@ ObjectReader._get_class = NewObjectReader_get_class
 ObjectReader._get_unpickler = NewObjectReader_get_unpickler
 ObjectReader.load_multi_persistent = NewObjectReader_load_multi_persistent
 ObjectReader.load_multi_oid = NewObjectReader_load_multi_oid
+
 
 def initialize(context):
     """Initializer called when used as a Zope 2 product."""

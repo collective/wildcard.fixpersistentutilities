@@ -1,11 +1,24 @@
 from zope.interface import Interface
-import imp, sys, string
+import imp
+import sys
+import string
 
 _generated_classes = {}
 _generated_modules = {}
+_auto_gen_enabled = False
 
-class FakeClass(object): pass
-class IFakeInterface(Interface): pass
+
+def toggleAutoGenClasses():
+    global _auto_gen_enabled
+    _auto_gen_enabled = not _auto_gen_enabled
+
+
+class FakeClass(object):
+    pass
+
+
+class IFakeInterface(Interface):
+    pass
 
 
 def create_module(module, name, _globals={}, _silly=('__doc__',)):
@@ -17,7 +30,8 @@ def create_module(module, name, _globals={}, _silly=('__doc__',)):
             current_module_repr += '.'
         current_module_repr += module
         try:
-            current_module_obj = __import__(current_module_repr, _globals, _globals, _silly)
+            current_module_obj = __import__(
+                current_module_repr, _globals, _globals, _silly)
         except ImportError:
             mod = imp.new_module(module)
             if current_module_obj:
@@ -25,7 +39,6 @@ def create_module(module, name, _globals={}, _silly=('__doc__',)):
             sys.modules[current_module_repr] = mod
             current_module_obj = mod
             _generated_modules[current_module_repr] = mod
-    
     if not hasattr(current_module_obj, name):
         key = current_module_repr + '.' + name
         if name[0] == "I" and name[1] in string.uppercase:
@@ -34,18 +47,19 @@ def create_module(module, name, _globals={}, _silly=('__doc__',)):
         else:
             _generated_classes[key] = FakeClass
         setattr(current_module_obj, name, _generated_classes[key])
-        
+
     return current_module_obj, getattr(current_module_obj, name)
 
-def ClassFactory(jar, module, name,
-                  _silly=('__doc__',), _globals={},
-                  ):
+
+def ClassFactory(jar, module, name, _silly=('__doc__',), _globals={}):
     try:
-        m=__import__(module, _globals, _globals, _silly)
+        m = __import__(module, _globals, _globals, _silly)
         return getattr(m, name)
     except:
         # create the modules
-        realmodule, obj = create_module(module, name, _globals=_globals, _silly=_silly)
+        realmodule, obj = create_module(
+            module, name, _globals=_globals, _silly=_silly)
+        # don't want to save this object...
+        import transaction
+        transaction.doom()
         return obj
-
-
