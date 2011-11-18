@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.1b4 ~ Unreleased
+------------------
+
+- add a log (INFO) on each module missing. [toutpt]
+- support Plone3 using transation.abort instead of doom
+  [toutpt]
+
 1.1b3 ~ 2011-11-06
 ------------------
 

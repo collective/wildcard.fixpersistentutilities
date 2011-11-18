@@ -2,11 +2,13 @@ from zope.interface import Interface
 import imp
 import sys
 import string
+import logging
 
 _generated_classes = {}
 _generated_modules = {}
 _auto_gen_enabled = False
 
+logger = logging.getLogger('wildcard.fixpersistentutilities')
 
 def toggleAutoGenClasses():
     global _auto_gen_enabled
@@ -56,10 +58,14 @@ def ClassFactory(jar, module, name, _silly=('__doc__',), _globals={}):
         m = __import__(module, _globals, _globals, _silly)
         return getattr(m, name)
     except:
+        logger.info('%s'%module)
         # create the modules
         realmodule, obj = create_module(
             module, name, _globals=_globals, _silly=_silly)
         # don't want to save this object...
         import transaction
-        transaction.doom()
+        try:
+            transaction.doom()
+        except AttributeError:
+            transaction.abort()
         return obj
