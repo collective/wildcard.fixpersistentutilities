@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1b4 ~ Unreleased
+1.1b4 ~ 2011-11-24
 ------------------
 
 - add a log (INFO) on each module missing. [toutpt]
