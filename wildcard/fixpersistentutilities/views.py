@@ -151,6 +151,8 @@ class FixPersistentUtilities(BrowserView):
         utilities = self.utilities()
         _type = self.request.get('type')
         utility_registrations = utilities[_type]
+        util_dottedname = self.request.get('util_dottedname')
+        sm = self.sitemanager()
         klass = resolve(self.request.get('util_dottedname'))
         if not self.deletable(klass):
             raise Exception("I'm not going to allow you to delete that!")
@@ -158,6 +160,8 @@ class FixPersistentUtilities(BrowserView):
             if x.__module__ == klass.__module__ and x == klass:
                 del utility_registrations[x]
                 break
+        if util_dottedname in sm:
+            sm._delObject(util_dottedname, suppress_events=True)
         self.set_utilities(utility_registrations, _type)
 
         self.request.response.redirect(
