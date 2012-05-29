@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.1b5'
+version = '1.1b6.dev0'
 
 setup(name='wildcard.fixpersistentutilities',
       version=version,
