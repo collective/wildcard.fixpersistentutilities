@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1b5 (unreleased)
+1.1b5 (2012-05-29)
 ------------------
 
 - Also remove utilities from the site root if five has
