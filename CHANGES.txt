@@ -4,7 +4,9 @@ Changelog
 1.1b5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Also remove utilities from the site root if five has
+  added them there. This will allow you to fully remove LinguaPlone.
+  [do3cc]
 
 
 1.1b4 ~ 2011-11-24
