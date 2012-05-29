@@ -1,0 +1,6 @@
+include *.rst
+include *.txt
+recursive-include wildcard *.zcml
+recursive-include wildcard *.pt
+recursive-include docs *.rst
+recursive-include docs *.txt
