@@ -4,7 +4,9 @@ Changelog
 1.1b6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- need to specify environment variable to use the
+  auto class generator.
+  [vangheem]
 
 
 1.1b5 (2012-05-29)

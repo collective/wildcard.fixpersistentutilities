@@ -1,11 +1,8 @@
-# -*- extra stuff goes here -*-
 from wildcard.fixpersistentutilities import classfactory
 import cPickle
 import cStringIO
-
-#Zope2.DB.classFactory = classfactory.ClassFactory
-
 from ZODB.serialize import ObjectReader
+import os
 
 
 def NewObjectReader_get_class(self, module, name):
@@ -40,10 +37,12 @@ def NewObjectReader_load_multi_oid(self, database_name, oid):
     reader = ObjectReader(conn, conn._cache, classfactory.ClassFactory)
     return reader.load_oid(oid)
 
-ObjectReader._get_class = NewObjectReader_get_class
-ObjectReader._get_unpickler = NewObjectReader_get_unpickler
-ObjectReader.load_multi_persistent = NewObjectReader_load_multi_persistent
-ObjectReader.load_multi_oid = NewObjectReader_load_multi_oid
+import pdb; pdb.set_trace()
+if os.environ.get('FPU_GENERATE_MISSING_CLASSES') == 'true':
+    ObjectReader._get_class = NewObjectReader_get_class
+    ObjectReader._get_unpickler = NewObjectReader_get_unpickler
+    ObjectReader.load_multi_persistent = NewObjectReader_load_multi_persistent
+    ObjectReader.load_multi_oid = NewObjectReader_load_multi_oid
 
 
 def initialize(context):

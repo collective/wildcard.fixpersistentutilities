@@ -44,3 +44,15 @@ This product should allow you to remove things from products that are
 no longer installed on the system; although, if you experience problems
 removing things, make sure to add those eggs to the system again.
 
+
+Automatically generate missing classes
+--------------------------------------
+
+If you no longer have a product installed that you're trying to
+remove, FPU can dynamically create the fake class for you.
+
+*this is dangerous if you don't delete fake class*
+
+To enable, specify this environment variable::
+
+    FPU_GENERATE_MISSING_CLASSES true
