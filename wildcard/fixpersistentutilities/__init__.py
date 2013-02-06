@@ -37,7 +37,7 @@ def NewObjectReader_load_multi_oid(self, database_name, oid):
     reader = ObjectReader(conn, conn._cache, classfactory.ClassFactory)
     return reader.load_oid(oid)
 
-import pdb; pdb.set_trace()
+
 if os.environ.get('FPU_GENERATE_MISSING_CLASSES') == 'true':
     ObjectReader._get_class = NewObjectReader_get_class
     ObjectReader._get_unpickler = NewObjectReader_get_unpickler
