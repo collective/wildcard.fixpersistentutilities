@@ -179,10 +179,15 @@ class FixPersistentUtilities(BrowserView):
 
     def utility_reg_data(self, util_klass, _type, reg_name, reg_klass):
         data = self.utility_data(util_klass, _type)
-        dottedname = reg_klass.__module__ + '.' + (inspect.isclass(reg_klass) \
-                        and reg_klass.__name__ or reg_klass.__class__.__name__)
-        oid = b64encode(hasattr(reg_klass, '_p_oid') and \
-                reg_klass._p_oid or '')
+        klass_name = inspect.isclass(reg_klass) \
+            and reg_klass.__name__ or reg_klass.__class__.__name__
+        if klass_name == 'InterfaceClass':
+            klass_name = reg_klass.__name__
+        dottedname = reg_klass.__module__ + '.' + klass_name
+        oid = ''
+        if hasattr(reg_klass, '_p_oid') and isinstance(reg_klass._p_oid, (basestring,)):
+            oid = b64encode(reg_klass._p_oid)
+
         data.update({
             'reg_name': reg_name,
             'reg_dottedname': dottedname,
