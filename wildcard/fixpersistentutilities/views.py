@@ -182,8 +182,6 @@ class FixPersistentUtilities(BrowserView):
         data = self.utility_data(util_klass, _type)
         klass_name = (inspect.isclass(reg_klass) or isinstance(reg_klass, InterfaceClass)) \
                      and reg_klass.__name__ or reg_klass.__class__.__name__
-        if klass_name == 'InterfaceClass':
-            klass_name = reg_klass.__name__
         dottedname = reg_klass.__module__ + '.' + klass_name
         oid = ''
         if hasattr(reg_klass, '_p_oid') and isinstance(reg_klass._p_oid, (basestring,)):
