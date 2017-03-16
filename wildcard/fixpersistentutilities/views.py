@@ -5,6 +5,7 @@ from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.interface import noLongerProvides
 from wildcard.fixpersistentutilities import classfactory
 from zope.component import getGlobalSiteManager
+from zope.interface.interface import InterfaceClass
 from urllib import urlencode
 from zope.dottedname.resolve import resolve
 import inspect
@@ -179,10 +180,8 @@ class FixPersistentUtilities(BrowserView):
 
     def utility_reg_data(self, util_klass, _type, reg_name, reg_klass):
         data = self.utility_data(util_klass, _type)
-        klass_name = inspect.isclass(reg_klass) \
-            and reg_klass.__name__ or reg_klass.__class__.__name__
-        if klass_name == 'InterfaceClass':
-            klass_name = reg_klass.__name__
+        klass_name = (inspect.isclass(reg_klass) or isinstance(reg_klass, InterfaceClass)) \
+                     and reg_klass.__name__ or reg_klass.__class__.__name__
         dottedname = reg_klass.__module__ + '.' + klass_name
         oid = ''
         if hasattr(reg_klass, '_p_oid') and isinstance(reg_klass._p_oid, (basestring,)):
