@@ -1,6 +1,6 @@
 from wildcard.fixpersistentutilities import classfactory
-import cPickle
-import cStringIO
+import pickle
+from io import StringIO
 from ZODB.serialize import ObjectReader
 import os
 
@@ -10,8 +10,8 @@ def NewObjectReader_get_class(self, module, name):
 
 
 def NewObjectReader_get_unpickler(self, pickle):
-    file = cStringIO.StringIO(pickle)
-    unpickler = cPickle.Unpickler(file)
+    file = StringIO.StringIO(pickle)
+    unpickler = pickle.Unpickler(file)
     unpickler.persistent_load = self._persistent_load
     factory = classfactory.ClassFactory
     conn = self._conn

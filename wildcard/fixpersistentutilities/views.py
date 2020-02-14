@@ -6,10 +6,11 @@ from zope.interface import noLongerProvides
 from wildcard.fixpersistentutilities import classfactory
 from zope.component import getGlobalSiteManager
 from zope.interface.interface import InterfaceClass
-from urllib import urlencode
+from six.moves.urllib.parse import urlencode
 from zope.dottedname.resolve import resolve
 import inspect
 from base64 import b64encode, b64decode
+import six
 
 EXPERT_ONLY_NAMESPACES = [
      'plone.',
@@ -101,7 +102,7 @@ class FixPersistentUtilities(BrowserView):
                     self.request.get('reg_dottedname')
                 ),
                 action='/delete-persistent-utility-reg',
-                params=self.request.form.items()
+                params=list(self.request.form.items())
             )
         elif self.request.get('cancel') == 'No':
             return self.request.response.redirect(
@@ -141,7 +142,7 @@ class FixPersistentUtilities(BrowserView):
                 msg="Are you sure you want to delete %s" % \
                                 self.request.get('util_dottedname'),
                 action='/delete-persistent-utility',
-                params=self.request.form.items()
+                params=list(self.request.form.items())
             )
         elif self.request.get('cancel') == 'No':
             return self.request.response.redirect(
@@ -184,7 +185,7 @@ class FixPersistentUtilities(BrowserView):
                      and reg_klass.__name__ or reg_klass.__class__.__name__
         dottedname = reg_klass.__module__ + '.' + klass_name
         oid = ''
-        if hasattr(reg_klass, '_p_oid') and isinstance(reg_klass._p_oid, (basestring,)):
+        if hasattr(reg_klass, '_p_oid') and isinstance(reg_klass._p_oid, (six.string_types,)):
             oid = b64encode(reg_klass._p_oid)
 
         data.update({
