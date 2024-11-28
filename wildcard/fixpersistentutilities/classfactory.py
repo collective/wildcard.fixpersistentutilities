@@ -10,6 +10,7 @@ _auto_gen_enabled = False
 
 logger = logging.getLogger('wildcard.fixpersistentutilities')
 
+
 def toggleAutoGenClasses():
     global _auto_gen_enabled
     _auto_gen_enabled = not _auto_gen_enabled
@@ -33,7 +34,8 @@ def create_module(module, name, _globals={}, _silly=('__doc__',)):
         current_module_repr += module
         try:
             current_module_obj = __import__(
-                current_module_repr, _globals, _globals, _silly)
+                current_module_repr, _globals, _globals, _silly
+            )
         except ImportError:
             mod = imp.new_module(module)
             if current_module_obj:
@@ -43,7 +45,7 @@ def create_module(module, name, _globals={}, _silly=('__doc__',)):
             _generated_modules[current_module_repr] = mod
     if not hasattr(current_module_obj, name):
         key = current_module_repr + '.' + name
-        if name[0] == "I" and name[1] in string.uppercase:
+        if name[0] == "I" and name[1] in string.ascii_uppercase:
             # interface class, so let's make an ad-hoc interface class here.
             _generated_classes[key] = IFakeInterface
         else:
@@ -58,12 +60,12 @@ def ClassFactory(jar, module, name, _silly=('__doc__',), _globals={}):
         m = __import__(module, _globals, _globals, _silly)
         return getattr(m, name)
     except:
-        logger.info('%s'%module)
+        logger.info('%s' % module)
         # create the modules
-        realmodule, obj = create_module(
-            module, name, _globals=_globals, _silly=_silly)
+        realmodule, obj = create_module(module, name, _globals=_globals, _silly=_silly)
         # don't want to save this object...
         import transaction
+
         try:
             transaction.doom()
         except AttributeError:

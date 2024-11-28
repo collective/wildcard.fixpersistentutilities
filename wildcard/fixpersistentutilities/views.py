@@ -13,26 +13,27 @@ from base64 import b64encode, b64decode
 import six
 
 EXPERT_ONLY_NAMESPACES = [
-     'plone.',
-     'Products.CMFPlone',
-     'Products.CMFCore',
-     'Products.CMFActionIcons',
-     'Products.CMFDiffTool',
-     'Products.PortalTransforms',
-     'Products.MimetypesRegistry',
-     'five.customerize',
-     'Products.CMFUid',
-     'Products.MailHost',
-     'Products.ATContentTypes',
-     'Products.SecureMailHost',
-     'zope.',
-     'five.localsitemanager',
-     'Products.TinyMCE'
+    'plone.',
+    'Products.CMFPlone',
+    'Products.CMFCore',
+    'Products.CMFActionIcons',
+    'Products.CMFDiffTool',
+    'Products.PortalTransforms',
+    'Products.MimetypesRegistry',
+    'five.customerize',
+    'Products.CMFUid',
+    'Products.MailHost',
+    'Products.ATContentTypes',
+    'Products.SecureMailHost',
+    'zope.',
+    'five.localsitemanager',
+    'Products.TinyMCE',
 ]
 
 
 def undoom_transaction():
     import transaction
+
     if transaction.isDoomed():
         tns = transaction.get()
         tns.status = "Active"
@@ -42,10 +43,13 @@ def find_object_or_class(objs, klass, oid):
     if type(objs) not in [list, tuple, set]:
         objs = [objs]
     for obj in objs:
-        if (klass == obj or \
-                (obj.__class__.__name__ == klass.__name__ and \
-                    oid == getattr(obj, '_p_oid', ''))) and \
-                        obj.__module__ == klass.__module__:
+        if (
+            klass == obj
+            or (
+                obj.__class__.__name__ == klass.__name__
+                and oid == getattr(obj, '_p_oid', '')
+            )
+        ) and obj.__module__ == klass.__module__:
             return obj
 
     return None
@@ -73,7 +77,7 @@ class FixPersistentUtilities(BrowserView):
         return {
             'adapters': sm.utilities._adapters[0],
             'subscribers': sm.utilities._subscribers[0],
-            'provided': sm.utilities._provided
+            'provided': sm.utilities._provided,
         }
 
     def set_utilities(self, utilities, _type):
@@ -96,17 +100,19 @@ class FixPersistentUtilities(BrowserView):
     def delete_utility_reg(self):
         if not self.request.get('submit', self.request.get('cancel')):
             return self.confirm_template(
-                msg="Are you sure you want to delete %s -- %s : %s" % (
+                msg="Are you sure you want to delete %s -- %s : %s"
+                % (
                     self.request.get('util_dottedname'),
                     self.request.get('reg_name'),
-                    self.request.get('reg_dottedname')
+                    self.request.get('reg_dottedname'),
                 ),
                 action='/delete-persistent-utility-reg',
-                params=list(self.request.form.items())
+                params=list(self.request.form.items()),
             )
         elif self.request.get('cancel') == 'No':
             return self.request.response.redirect(
-                self.context.absolute_url() + '/@@fix-persistent-utilities')
+                self.context.absolute_url() + '/@@fix-persistent-utilities'
+            )
 
         undoom_transaction()
 
@@ -124,8 +130,7 @@ class FixPersistentUtilities(BrowserView):
                 for name, klass in utility_registrations[x].items():
                     found = find_object_or_class(klass, reg_klass, oid)
                     if name == reg_name and found:
-                        if type(utility_registrations[x][name]) in \
-                                                        [list, tuple, set]:
+                        if type(utility_registrations[x][name]) in [list, tuple, set]:
                             regs = list(utility_registrations[x][name])
                             regs.remove(found)
                             utility_registrations[x][name] = tuple(regs)
@@ -134,19 +139,21 @@ class FixPersistentUtilities(BrowserView):
 
         self.set_utilities(utility_registrations, _type)
         self.request.response.redirect(
-            self.context.absolute_url() + '/@@fix-persistent-utilities')
+            self.context.absolute_url() + '/@@fix-persistent-utilities'
+        )
 
     def delete_utility(self):
         if not self.request.get('submit', self.request.get('cancel')):
             return self.confirm_template(
-                msg="Are you sure you want to delete %s" % \
-                                self.request.get('util_dottedname'),
+                msg="Are you sure you want to delete %s"
+                % self.request.get('util_dottedname'),
                 action='/delete-persistent-utility',
-                params=list(self.request.form.items())
+                params=list(self.request.form.items()),
             )
         elif self.request.get('cancel') == 'No':
             return self.request.response.redirect(
-                self.context.absolute_url() + '/@@fix-persistent-utilities')
+                self.context.absolute_url() + '/@@fix-persistent-utilities'
+            )
 
         undoom_transaction()
 
@@ -167,7 +174,8 @@ class FixPersistentUtilities(BrowserView):
         self.set_utilities(utility_registrations, _type)
 
         self.request.response.redirect(
-            self.context.absolute_url() + '/@@fix-persistent-utilities')
+            self.context.absolute_url() + '/@@fix-persistent-utilities'
+        )
 
     def __call__(self):
 
@@ -176,35 +184,39 @@ class FixPersistentUtilities(BrowserView):
     def utility_data(self, klass, _type):
         return {
             'util_dottedname': klass.__module__ + '.' + klass.__name__,
-            'type': _type
+            'type': _type,
         }
 
     def utility_reg_data(self, util_klass, _type, reg_name, reg_klass):
         data = self.utility_data(util_klass, _type)
-        klass_name = (inspect.isclass(reg_klass) or isinstance(reg_klass, InterfaceClass)) \
-                     and reg_klass.__name__ or reg_klass.__class__.__name__
+        klass_name = (
+            (inspect.isclass(reg_klass) or isinstance(reg_klass, InterfaceClass))
+            and reg_klass.__name__
+            or reg_klass.__class__.__name__
+        )
         dottedname = reg_klass.__module__ + '.' + klass_name
         oid = ''
-        if hasattr(reg_klass, '_p_oid') and isinstance(reg_klass._p_oid, (six.string_types,)):
+        if hasattr(reg_klass, '_p_oid') and isinstance(
+            reg_klass._p_oid, (six.string_types,)
+        ):
             oid = b64encode(reg_klass._p_oid)
 
-        data.update({
-            'reg_name': reg_name,
-            'reg_dottedname': dottedname,
-            'reg_obj_oid': oid
-        })
+        data.update(
+            {'reg_name': reg_name, 'reg_dottedname': dottedname, 'reg_obj_oid': oid}
+        )
         return data
 
     def remove_utility_url(self, klass, _type):
         data = urlencode(self.utility_data(klass, _type))
-        return '%s/@@delete-persistent-utility?%s' % (
-            self.context.absolute_url(), data)
+        return '%s/@@delete-persistent-utility?%s' % (self.context.absolute_url(), data)
 
     def remove_utility_reg_url(self, util, _type, reg_name, reg_klass):
         data = self.utility_reg_data(util, _type, reg_name, reg_klass)
         data = urlencode(data)
         return '%s/@@delete-persistent-utility-reg?%s' % (
-            self.context.absolute_url(), data)
+            self.context.absolute_url(),
+            data,
+        )
 
     def name(self, m):
         return str(m)
@@ -239,8 +251,7 @@ class RemoveInterfaces(BrowserView):
             if iface.providedBy(obj):
                 if not dryrun:
                     noLongerProvides(obj, iface)
-                self.request.response.write('Removed from %s\n' % \
-                    self.obj_path(obj))
+                self.request.response.write('Removed from %s\n' % self.obj_path(obj))
 
             if hasattr(obj, 'objectIds'):
                 self.check_folder(obj, iface, dryrun)
@@ -255,18 +266,18 @@ class RemoveInterfaces(BrowserView):
                 module, name = self.request.get('dottedname').rsplit('.', 1)
                 _, iface = classfactory.create_module(module, name)
 
-            self.request.response.write('Removing %s\n' % \
-                self.request.get('dottedname'))
+            self.request.response.write(
+                b'Removing %s\n' % (self.request.get('dottedname').encode())
+            )
 
             obj = self.context
             if iface.providedBy(obj):
                 if not dryrun:
                     noLongerProvides(obj, iface)
-                self.request.response.write('Removed from %s\n' % \
-                    self.obj_path(obj))
+                self.request.response.write('Removed from %s\n' % self.obj_path(obj))
             if not dryrun:
                 undoom_transaction()
             self.check_folder(obj, iface, dryrun)
-            self.request.response.write('done.')
+            self.request.response.write(b'done.')
         else:
             return super(RemoveInterfaces, self).__call__()
